@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  ConcentrationViewController.swift
 //  Concentration
 //
 //  Created by allan galdino on 11/08/21.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ConcentrationViewController: UIViewController {
 
     // MARK: - Properties
 
@@ -24,7 +24,7 @@ class ViewController: UIViewController {
     private func updateFlipCountLabel() {
         let attributes: [NSAttributedString.Key: Any] = [
             .strokeWidth: 5.0,
-            .strokeColor: UIColor.orange
+            .strokeColor: UIColor.black
         ]
         let attributedString = NSAttributedString(string: "Flips: \(flipCount)",
                                                   attributes: attributes)
@@ -56,22 +56,31 @@ class ViewController: UIViewController {
     // MARK: - Contents
 
     private func updateViewFromModel() {
+        guard cardButtons != nil else { return }
+
         for index in cardButtons.indices {
             let button = cardButtons[index]
             let card = game.cards[index]
             if card.isFaceUp {
                 button.setTitle(emoji(for: card), for: .normal)
-                button.backgroundColor = .white
+                button.backgroundColor = .lightGray
             } else {
                 button.setTitle("", for: .normal)
-                button.backgroundColor = card.isMatched ? .none : .systemOrange
+                button.backgroundColor = card.isMatched ? .none : .systemBlue
             }
         }
     }
 
     // MARK: - Emoji
 
-//    private var emojiChoices = ["👻", "🎃", "🦇", "😱", "🙀", "🍭", "🍬", "🍎"]
+    var theme: String? {
+        didSet {
+            emojiChoices = theme ?? ""
+            emoji = [:]
+            updateViewFromModel()
+        }
+    }
+
     private var emojiChoices = "👻🎃🦇😱🙀🍭🍬🍎"
 
     private var emoji = [Int: String]()
